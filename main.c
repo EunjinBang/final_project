@@ -44,7 +44,16 @@ int main(int argc, const char * argv[]) {
     }
     
     //1-2. loading each patient informations
-    
+    while(3 == fscanf("3가지 읽기", 변수들))
+    {
+    	for
+			fscnaf(5개 읽기);
+
+		ifct_element = ifctele_genElement(index, age, ...);		
+		
+		ifctdb_addTail(ifct_element);
+			
+}
     //1-3. FILE pointer close
     fclose(fp);
     
@@ -67,8 +76,7 @@ int main(int argc, const char * argv[]) {
                 printf("Exiting the program... Bye bye.\n");
                 break;
                 
-            case MENU_PATIENT:
-                
+            case MENU_PATIENT: //1번 선택 
                 break;
                 
             case MENU_PLACE:
