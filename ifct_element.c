@@ -102,8 +102,8 @@ char countryName[N_PLACE+1][MAX_PLACENAME] =
 typedef struct ifs_ele {
 	int index;//번호
 	int age;//나이
-	int time;//감염 시점
-	place_t place[N_HISTORY];//감염 직전 이동경로 place_t 배열 (N_HISTORY) 
+	int detected_time;//감염 시점
+	place_t history_place[N_HISTORY];//감염 직전 이동경로 place_t 배열 (N_HISTORY) 
 }ifs_ele_t;
 
 
@@ -113,8 +113,9 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 	ptr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));//하나 잡기 5시 17분 
 
 	ptr->index = index;
-	prt->age = age;
-	
+	ptr->age = age;
+	ptr->time = detected_time;
+	ptr->place = history_place;
 	
 	//free 넣으면 안됨 
 	return ptr;
@@ -132,10 +133,10 @@ unsigned int ifctele_getinfestedTime(void* obj);
 void ifsele_printElement(void*obj){
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
-	printf("number : %i\n", strPtr->ID);
+	printf("number : %i\n", strPtr->index);
 	printf("age : %i\n", strPtr->age);
-	printf("time : %i\n", strPtr->time);
-	printf("place : %s\n", strPtr->place_t);
+	printf("time : %i\n", strPtr->detected_time);
+	printf("place : %s\n", strPtr->history_place);
 	//print elements
 };
 

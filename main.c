@@ -30,6 +30,7 @@ int main(int argc, const char * argv[]) {
     
     //------------- 1. loading patient info file ------------------------------
     //1-1. FILE pointer open
+    
     if (argc != 2)
     {
         printf("[ERROR] syntax : infestPath (file path).");
@@ -44,12 +45,13 @@ int main(int argc, const char * argv[]) {
     }
     
     //1-2. loading each patient informations
-    while(3 == fscanf("3가지 읽기", 변수들))
+    while(3 == fscanf("%i %i %i", &ifs_ele_t.index, &ifs_ele_t.age, &ifs_ele_t.time)) //3개 읽기 
     {
     	for
-			fscnaf(5개 읽기);
-
-		ifct_element = ifctele_genElement(index, age, ...);		
+			fscnaf(f, "%i %i %i %s", &ifs_ele_t.index, &ifs_ele_t.age, &ifs_ele_t.time, &ifs_ele_t.place);//5개 읽기 
+			fclose(f);
+			
+		ifct_element = ifctele_genElement(index, age, time, place);		
 		
 		ifctdb_addTail(ifct_element);
 			
