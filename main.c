@@ -25,8 +25,8 @@ int main(int argc, const char * argv[]) {
     int menu_selection;
     void *ifct_element;
     FILE* fp;
-    int pIndex, age, time;
-    int placeHist[N_HISTORY];
+    int index, age, detected_time;
+    int history_place[N_HISTORY];
     
     //------------- 1. loading patient info file ------------------------------
     //1-1. FILE pointer open
@@ -45,17 +45,20 @@ int main(int argc, const char * argv[]) {
     }
     
     //1-2. loading each patient informations
-    while(3 == fscanf("%i %i %i", &ifs_ele_t.index, &ifs_ele_t.age, &ifs_ele_t.time)) //3개 읽기 
+    
+    while(3 == (fscanf(fp,"%i %i %i", &index, &age, &detected_time))) //3개 읽기 
     {
-    	for
-			fscnaf(f, "%i %i %i %s", &ifs_ele_t.index, &ifs_ele_t.age, &ifs_ele_t.time, &ifs_ele_t.place);//5개 읽기 
-			fclose(f);
+    	int i;
+    	for(i=0;i<5;i++)
+			fscnaf(fp, "%i %i %i %s", &index, &age, &detected_time, &history_place);//5개 읽기 
+			fclose(fp);
+		
 			
-		ifct_element = ifctele_genElement(index, age, time, place);		
+		ifct_element = ifctele_genElement(index, age, detected_time, history_place);		
 		
 		ifctdb_addTail(ifct_element);
 			
-}
+	}
     //1-3. FILE pointer close
     fclose(fp);
     
@@ -78,7 +81,9 @@ int main(int argc, const char * argv[]) {
                 printf("Exiting the program... Bye bye.\n");
                 break;
                 
-            case MENU_PATIENT: //1번 선택 
+            case MENU_PATIENT: //1번 선택
+				printf("Select a patient. : "); //환자 선택 
+				scanf("%d", &index);                                                                                                                           
                 break;
                 
             case MENU_PLACE:

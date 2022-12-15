@@ -108,18 +108,18 @@ typedef struct ifs_ele {
 
 
 void* ifctele_genElement(int index, int age, unsigned int detected_time, int history_place[N_HISTORY]){
-	ifs_ele_t*ptr;
+	ifs_ele_t*strPtr;
 	
-	ptr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));//하나 잡기 5시 17분 
+	strPtr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));//동적 메모리 하나 잡기 
 
-	ptr->index = index;
-	ptr->age = age;
-	ptr->time = detected_time;
-	ptr->place = history_place;
+	strPtr->index = index;
+	strPtr->age = age;
+	strPtr->detected_time = detected_time;
+	//strcpy(strPtr->history_place, history_place);
 	
 	//free 넣으면 안됨 
-	return ptr;
-}
+	return strPtr;
+};
 
 int ifctele_getAge(void* obj){
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
