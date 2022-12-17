@@ -26,7 +26,7 @@ int main(int argc, const char * argv[]) {
     void *ifct_element;
     FILE* fp;
     int index, age, detected_time;
-    int history_place[N_HISTORY];
+    int history_place[N_HISTORY]; 
     
     //------------- 1. loading patient info file ------------------------------
     //1-1. FILE pointer open
@@ -49,9 +49,10 @@ int main(int argc, const char * argv[]) {
     while(3 == (fscanf(fp,"%i %i %i", &index, &age, &detected_time))) //3개 읽기 
     {
     	int i;
-    	for(i=0;i<5;i++)
-			fscnaf(fp, "%i %i %i %s", &index, &age, &detected_time, &history_place);//5개 읽기 
+    	for(i=0;i<N_HISTORY;i++){
+			fscnaf(fp, "%i", &history_place[i]);//5개 장소 읽기 
 			fclose(fp);
+		}
 		
 			
 		ifct_element = ifctele_genElement(index, age, detected_time, history_place);		
@@ -83,7 +84,9 @@ int main(int argc, const char * argv[]) {
                 
             case MENU_PATIENT: //1번 선택
 				printf("Select a patient. : "); //환자 선택 
-				scanf("%d", &index);                                                                                                                           
+				scanf("%d", &index);
+				ifctele_printElement(ifctdb_getData(index)); //선택한 환자에 대한 정보 출력 
+				                                                                                                                        
                 break;
                 
             case MENU_PLACE:
