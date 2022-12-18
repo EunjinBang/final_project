@@ -28,11 +28,6 @@ int main(int argc, const char * argv[]) {
     int index, age, detected_time;
     int history_place[N_HISTORY]; 
     
-    int scan_index; 	//입력받은 환자 번호 
-    int scan_place; 	//입력받은 지역 이름 
-    int min_age;		//입력받은 최소 나이
-	int max_age; 		//입력받은 최대 나이 
-    
     //------------- 1. loading patient info file ------------------------------
     //1-1. FILE pointer open
     
@@ -80,7 +75,14 @@ int main(int argc, const char * argv[]) {
         
         switch(menu_selection)
         {
-        	int i;
+        	int j;
+			int i;
+        	int scan_index; 					//입력받은 환자 번호 
+    		char scan_place[MAX_PLACENAME]; 	//입력받은 장소 이름
+			int date;							 
+   	 		int min_age;						//입력받은 최소 나이
+			int max_age; 						//입력받은 최대 나이 
+        	
             case MENU_EXIT:
                 printf("Exiting the program... Bye bye.\n");
                 break;
@@ -100,10 +102,21 @@ int main(int argc, const char * argv[]) {
 				                                                 
                 break;
                 
-            case MENU_PLACE:									//2번 선택->지정된 장소에서 발병된 환자 출력 
+            case MENU_PLACE:									//2번 선택->지정된 장소에서 감염이 확인된 환자 출력 
             	
             	printf("Select a location : ");					//지역 선택 
             	scanf("%s", &scan_place);
+            	printf("\n");
+            	
+            	
+            	for(j=0;j<ifctdb_len();j++){					//모든 환자 데이터를 하나씩 점검 
+                	ifct_element = ifctdb_getData(j);
+                	for(date=1;date<3;date++){					//지정된 장소가 환자의 발병날과 발병 바로 직전 날의 장소와 동일한지 확인 
+						if (strcmp(scan_place, ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-date))) == 0){
+						ifctele_printElement(ifct_element);
+						}
+					}
+				}
                 
                 break;
                 
@@ -119,7 +132,6 @@ int main(int argc, const char * argv[]) {
                 	ifct_element = ifctdb_getData(i);
 					if(min_age <= ifctele_getAge(ifct_element) && ifctele_getAge(ifct_element) <= max_age){
 						ifctele_printElement(ifct_element);		//범위 안에 든다면 환자 정보 출력 
-						printf("\n");
 					}
 				}
 				 
