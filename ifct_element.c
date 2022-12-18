@@ -100,10 +100,10 @@ char countryName[N_PLACE+1][MAX_PLACENAME] =
 
 
 typedef struct ifs_ele {
-	int index;//번호
-	int age;//나이
-	int detected_time;//감염 시점
-	place_t history_place[N_HISTORY];//감염 직전 이동경로 place_t 배열 (N_HISTORY) 
+	int index;							//번호
+	int age;							//나이
+	int detected_time;					//감염 시점
+	place_t history_place[N_HISTORY];	//감염 직전 이동경로 place_t 배열 (N_HISTORY) 
 }ifs_ele_t;
 
 
@@ -112,7 +112,7 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 	
 	ifs_ele_t*strPtr;
 	
-	strPtr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));//동적 메모리 하나 잡기 
+	strPtr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));	//동적 메모리 하나 잡기 
 
 	strPtr->index = index;
 	strPtr->age = age;
@@ -122,16 +122,30 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 	
 	//free 넣으면 안됨 
 	return strPtr;
-};
+}
 
 int ifctele_getAge(void* obj){
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
 	return (strPtr->age);
-};
+}
 
-int ifctele_getHistPlaceIndex(void* obj, int index);
-unsigned int ifctele_getinfestedTime(void* obj);
+
+//char* ifctele_getPlaceName(int placeIndex)
+
+
+int ifctele_getHistPlaceIndex(void* obj, int index){
+	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
+	
+	return (strPtr->history_place[index]);
+}
+
+unsigned int ifctele_getinfestedTime(void* obj){
+	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
+	
+	return (strPtr->detected_time);
+}
+
 
 void ifctele_printElement(void*obj){
 	int i;
@@ -143,7 +157,7 @@ void ifctele_printElement(void*obj){
 	printf("place : " );
 	
 	//print elements
-};
+}
 
 
 
