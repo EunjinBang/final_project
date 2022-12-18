@@ -54,7 +54,7 @@ int main(int argc, const char * argv[]) {
     {
     	int i;
     	for(i=0;i<5;i++){
-			fscanf(fp, "%i", &history_place[i]);		//fscanf를 fscnaf라고 씀... 여기서 엄청 헤맸다 바보야~!!
+			fscanf(fp, "%i", &history_place[i]);					//5가지 위치 읽기 
 		}
 		
 			ifct_element = ifctele_genElement(index, age, detected_time, history_place);
@@ -80,6 +80,7 @@ int main(int argc, const char * argv[]) {
         
         switch(menu_selection)
         {
+        	int i;
             case MENU_EXIT:
                 printf("Exiting the program... Bye bye.\n");
                 break;
@@ -99,22 +100,29 @@ int main(int argc, const char * argv[]) {
 				                                                 
                 break;
                 
-            case MENU_PLACE:								//2번 선택->지정된 장소에서 발병된 환자 출력 
+            case MENU_PLACE:									//2번 선택->지정된 장소에서 발병된 환자 출력 
             	
-            	printf("Select a location : ");				//지역 선택 
+            	printf("Select a location : ");					//지역 선택 
             	scanf("%s", &scan_place);
                 
                 break;
                 
-            case MENU_AGE:
+            case MENU_AGE:										//3번 선택->특정 나이 범위의 환자 정보 출력  
                 
                 printf("Enter a minimum age : ");
-                scanf("%i", &min_age);
+                scanf("%i", &min_age);							//나이 최솟값 입력받음 
                 printf("\nEnter a maximum age : ");
-                scanf("%i", &max_age);
+                scanf("%i", &max_age);							//나이 최댓값 입력받음 
+                printf("\n");
                 
-				//ifct_element를  get_Age함수에 넣은 값이 min_age와 max_age의 사이일 때 printElement 실행 
-                
+                for(i=0;i<ifctdb_len();i++){					//범위 안에 드는지 모든 환자 데이터를 점검 
+                	ifct_element = ifctdb_getData(i);
+					if(min_age <= ifctele_getAge(ifct_element) && ifctele_getAge(ifct_element) <= max_age){
+						ifctele_printElement(ifct_element);		//범위 안에 든다면 환자 정보 출력 
+						printf("\n");
+					}
+				}
+				 
                 break;
                 
             case MENU_TRACK:
