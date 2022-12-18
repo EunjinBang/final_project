@@ -84,14 +84,19 @@ int main(int argc, const char * argv[]) {
                 printf("Exiting the program... Bye bye.\n");
                 break;
                 
-            case MENU_PATIENT: 								//1번 선택->지정된 환자의 정보 출력 
+            case MENU_PATIENT: 									//1번 선택->지정된 환자의 정보 출력 
             
-				printf("Select a patient. : "); 			//환자 선택 
+				printf("Select a patient : "); 					//환자 선택 
 				scanf("%i", &scan_index);
-				ifct_element = ifctdb_getData(scan_index); 
-				ifctele_printElement(ifct_element);			//선택한 환자에 대한 정보 출력 
-				//환자번호 안의 숫자를 입력했을 떄만 되도록 수정해야 함. 그 외의 수는 에러 띄우기 
-				                                                    
+				printf("\n");
+				
+				if (0 <= scan_index && scan_index <= ifctdb_len()-1){
+					ifct_element = ifctdb_getData(scan_index);
+					ifctele_printElement(ifct_element);			//선택한 환자에 대한 정보 출력 
+				}
+				else
+					printf("[ERROR] You should enter between 0~%i\n", ifctdb_len()-1);		//db 밖의 환자 번호를 입력하면 에러 출력 
+				                                                 
                 break;
                 
             case MENU_PLACE:								//2번 선택->지정된 장소에서 발병된 환자 출력 

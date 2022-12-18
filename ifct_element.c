@@ -159,8 +159,9 @@ void ifctele_printElement(void*obj){
 	printf("place : " );
 	//for문으로 장소 출력하게 만들어야 함
 	for(i=0;i<N_HISTORY;i++){
-		printf("%i\t", strPtr->history_place[i]);	//숫자가 아닌 지역 이름이 영어로 나오도록 수정하기 
+		printf("%s\t", countryName[strPtr->history_place[i]]);	//숫자가 아닌 지역 이름이 영어로 나오도록 수정하기 
 	}
+	printf("\n");
 }
 
 //element.h 파일의 함수 순서에 맞게 수정하기 
