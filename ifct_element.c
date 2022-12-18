@@ -117,8 +117,10 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 	strPtr->index = index;
 	strPtr->age = age;
 	strPtr->detected_time = detected_time;
-	for(i=0;i<N_HISTORY;i++)
+	
+	for(i=0;i<N_HISTORY;i++){
 		strPtr->history_place[i] = history_place[i];
+	}
 	
 	//free 넣으면 안됨 
 	return strPtr;
@@ -131,7 +133,9 @@ int ifctele_getAge(void* obj){
 }
 
 
-//char* ifctele_getPlaceName(int placeIndex)
+char* ifctele_getPlaceName(int placeIndex){
+	return countryName[placeIndex];
+}
 
 
 int ifctele_getHistPlaceIndex(void* obj, int index){
@@ -141,9 +145,7 @@ int ifctele_getHistPlaceIndex(void* obj, int index){
 }
 
 unsigned int ifctele_getinfestedTime(void* obj){
-	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
-	
-	return (strPtr->detected_time);
+
 }
 
 
@@ -153,13 +155,15 @@ void ifctele_printElement(void*obj){
 	
 	printf("number : %i\n", strPtr->index);
 	printf("age : %i\n", strPtr->age);
-	printf("time : %i\n", strPtr->detected_time);
+	printf("infected time : %i\n", strPtr->detected_time);
 	printf("place : " );
-	
-	//print elements
+	//for문으로 장소 출력하게 만들어야 함
+	for(i=0;i<N_HISTORY;i++){
+		printf("%i\t", strPtr->history_place[i]);	//숫자가 아닌 지역 이름이 영어로 나오도록 수정하기 
+	}
 }
 
-
+//element.h 파일의 함수 순서에 맞게 수정하기 
 
 
 
