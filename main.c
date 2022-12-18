@@ -47,20 +47,18 @@ int main(int argc, const char * argv[]) {
     }
     
     //1-2. loading each patient informations
-    
     while(3 == (fscanf(fp,"%i %i %i", &index, &age, &detected_time))) //3개 읽기 
     {
     	int i;
     	for(i=0;i<N_HISTORY;i++){
-			fscnaf(fp, "%i", &history_place[i]);//5개 장소 읽기
+			//fscnaf(fp, "%i", &history_place[i]);//5개 장소 읽기 //여기에 뭔가 오류가 있음. 여기 뺴면 실행 됨 
 		}
 		
-			
 		ifct_element = ifctele_genElement(index, age, detected_time, history_place);		
 		
 		ifctdb_addTail(ifct_element);
-			
 	}
+	
     //1-3. FILE pointer close
     fclose(fp);
     
@@ -84,10 +82,13 @@ int main(int argc, const char * argv[]) {
                 break;
                 
             case MENU_PATIENT: //1번 선택
+            
 				printf("Select a patient. : "); //환자 선택 
 				scanf("%i", &scan_index);
 				ifct_element = ifctdb_getData(scan_index); 
 				ifctele_printElement(ifct_element);//선택한 환자에 대한 정보 출력 
+				//0~4번 환자번호를 입력했을 떄만 되도록 수정해야 함 
+				
 				                                                                                                                        
                 break;
                 
