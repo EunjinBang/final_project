@@ -78,8 +78,7 @@ int main(int argc, const char * argv[]) {
         	int j;
 			int i;
         	int scan_index; 					//입력받은 환자 번호 
-    		char scan_place[MAX_PLACENAME]; 	//입력받은 장소 이름
-			int date;							 
+    		char scan_place[MAX_PLACENAME]; 	//입력받은 장소 이름							 
    	 		int min_age;						//입력받은 최소 나이
 			int max_age; 						//입력받은 최대 나이 
         	
@@ -111,11 +110,11 @@ int main(int argc, const char * argv[]) {
             	
             	for(j=0;j<ifctdb_len();j++){					//모든 환자 데이터를 하나씩 점검 
                 	ifct_element = ifctdb_getData(j);
-                	for(date=1;date<3;date++){					//지정된 장소가 환자의 발병날과 발병 바로 직전 날의 장소와 동일한지 확인 
-						if (strcmp(scan_place, ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-date))) == 0){
-						ifctele_printElement(ifct_element);
-						}
+                	
+					if (strcmp(scan_place, ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-1))) == 0){	//환자의 마지막 장소와 입력받은 문자열이 같으면 출력 
+					ifctele_printElement(ifct_element);
 					}
+					
 				}
                 
                 break;
