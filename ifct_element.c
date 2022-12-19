@@ -145,7 +145,9 @@ int ifctele_getHistPlaceIndex(void* obj, int index){
 }
 
 unsigned int ifctele_getinfestedTime(void* obj){
-
+	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
+	
+	return (strPtr->detected_time);
 }
 
 

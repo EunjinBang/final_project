@@ -19,7 +19,11 @@
 #define TIME_HIDE           2
 
 
-int trackInfester(int patient_no, int *detected_time, int *place);
+//int trackInfester(int patient_no, int *detected_time, int *place);
+int trackInfester(int patient_no);
+int isMet(int patient_no, int entered_patient);
+int convertTimetoIndex(int time, int infested_time);
+
 int main(int argc, const char * argv[]) {
     
     int menu_selection;
@@ -80,7 +84,11 @@ int main(int argc, const char * argv[]) {
         	int scan_index; 					//입력받은 환자 번호 
     		char scan_place[MAX_PLACENAME]; 	//입력받은 장소 이름							 
    	 		int min_age;						//입력받은 최소 나이
-			int max_age; 						//입력받은 최대 나이 
+			int max_age; 						//입력받은 최대 나이
+			int root_patient;					//최초 전파자를 찾기 위해 입력받은 환자 번호
+			int p_index;						//현재 환자 
+			int spreader;						//전파자
+			int initial_spreader;				//최초 전파자 
         	
             case MENU_EXIT:
                 printf("Exiting the program... Bye bye.\n");
@@ -137,6 +145,30 @@ int main(int argc, const char * argv[]) {
                 break;
                 
             case MENU_TRACK:
+            	
+            	printf("Select a patient : ");
+            	scanf("%i", &root_patient);
+            	p_index = root_patient;
+            	
+            	if (0 <= p_index && p_index <= ifctdb_len()-1){
+				
+            		while(0 <= p_index){
+            			spreader = trackInfester(p_index);
+            			if(0 <= spreader){
+            				printf("Patient %i was insfected with patient %i\n", p_index, spreader);
+            				initial_spreader = spreader;
+            				break;
+						}
+					
+						else{
+							initial_spreader = p_index;
+							p_index = spreader;
+						}
+					}
+					printf("The first spreader is number %i patient.", initial_spreader);
+				}
+				else
+					printf("[ERROR] You should enter between 0~%i\n", ifctdb_len()-1);
                     
                 break;
                 
@@ -150,3 +182,87 @@ int main(int argc, const char * argv[]) {
     
     return 0;
 }
+
+
+int trackInfester(int patient_no){
+	int i;
+	int spreader;	//전파자 
+	int max;
+	int met_time;
+	void *ifct_element;
+	
+	ifct_element = ifctdb_getData(patient_no);
+	max = ifctele_getinfestedTime(ifct_element);
+	
+	for(i=0;i<ifctdb_len();i++){
+		if(patient_no != i){
+			met_time = isMet(patient_no, i);
+			if(met_time > 0){
+				if(met_time <= max){
+					max = met_time;
+					spreader = i;
+				}
+			}
+		} 
+	}
+	return spreader;
+}
+
+int isMet(int patient_no, int entered_patient){
+	int i;
+	int p_move_time;
+	int p_move_place;
+	int t_move_time;
+	int t_move_place;
+	int met_time;
+	void *ifct_element;
+	
+	ifct_element = ifctdb_getData(patient_no);
+	for(i=2;i<N_HISTORY;i++){
+		p_move_time = (ifctele_getinfestedTime(ifct_element) - i);
+		p_move_place = ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-1-i);
+		
+		//for(j=2;j<N_HISTORY;j++) //그냥 날짜 위치가 같으면 출력하는게 아니고 감염시킬 수 있는 날에 위치가 같은지 비교해서 출력하도록 수정해야 함 
+		ifct_element = ifctdb_getData(entered_patient);
+		t_move_time = convertTimetoIndex(p_move_time, ifctele_getinfestedTime(ifct_element));
+		t_move_place = ifctele_getHistPlaceIndex(ifct_element, t_move_time);
+		
+		if(p_move_place == t_move_place){
+				met_time = p_move_time;
+			}
+			
+		else{
+			met_time = t_move_time;
+		}
+		
+	return met_time;
+	}
+}
+
+int convertTimetoIndex(int time, int infested_time){
+	int index = -1; 		//초기값 -1
+	
+	if (time <= infested_time && time > infested_time - N_HISTORY){
+		index = N_HISTORY-(infested_time - time) - 1;			//입력받은 시점으로 장소 배열의 index 변환 
+	} 
+	
+	return index;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
