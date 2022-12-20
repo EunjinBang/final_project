@@ -88,6 +88,7 @@ int main(int argc, const char * argv[]) {
 			int root_patient;					//최초 전파자를 찾기 위해 입력받은 환자 번호
 			int p_index;						//현재 환자 
 			int spreader;						//전파자
+			int pre_spreader;					//이전 전파자 
 			int initial_spreader;				//최초 전파자 
         	
             case MENU_EXIT:
@@ -154,16 +155,27 @@ int main(int argc, const char * argv[]) {
 				
             		while(0 <= p_index){
             			spreader = trackInfester(p_index);
-            			if(0 <= spreader){
+            			
+            			if(0 <= spreader && spreader != p_index){
             				printf("Patient %i was insfected with patient %i\n", p_index, spreader);
+            			}	
+            			else if(0 <= spreader && spreader == p_index){
             				initial_spreader = spreader;
-            				break;
-						}
-					
-						else{
-							initial_spreader = p_index;
-							p_index = spreader;
-						}
+            			}	
+            				
+            				while(p_index != spreader){
+            					pre_spreader = trackInfester(spreader);
+            					if(0 <= pre_spreader && pre_spreader != spreader){
+            						printf("Patient %i was insfected with patient %i\n", spreader, pre_spreader);
+            						initial_spreader = pre_spreader;
+								}
+								else if(0 <= pre_spreader && pre_spreader == spreader){
+									initial_spreader = pre_spreader;
+								}
+							break;
+							}
+							
+            			break;
 					}
 					printf("The first spreader is number %i patient.", initial_spreader);
 				}
@@ -186,7 +198,7 @@ int main(int argc, const char * argv[]) {
 
 int trackInfester(int patient_no){
 	int i;
-	int spreader;	//전파자 
+	int spreader = -1;	//전파자 
 	int max;
 	int met_time;
 	void *ifct_element;
@@ -205,6 +217,10 @@ int trackInfester(int patient_no){
 			}
 		} 
 	}
+	if(spreader == -1){
+		spreader = patient_no;
+	}
+	
 	return spreader;
 }
 
@@ -230,13 +246,89 @@ int isMet(int patient_no, int entered_patient){
 		if(p_move_place == t_move_place){
 				met_time = p_move_time;
 			}
-			
+	
 		else{
 			met_time = t_move_time;
 		}
-		
+
 	return met_time;
 	}
+}
+
+int convertTimetoIndex(int time, int infested_time){
+	int index = -1; 		//초기값 -1
+	
+	if (time <= infested_time && time >= infested_time - 1){
+		index = N_HISTORY-(infested_time - time) - 1;			//입력받은 시점으로 장소 배열의 index 변환 
+	} 
+	
+	return index;
+}
+
+
+/*
+int trackInfester(int patient_no){
+	int i;
+	int spreader;	//전파자 
+	int max;
+	int met_time;
+	void *ifct_element;
+	
+	ifct_element = ifctdb_getData(patient_no);
+	max = ifctele_getinfestedTime(ifct_element);
+	
+	for(i=0;i<ifctdb_len();i++){
+		if(patient_no != i){
+			met_time = isMet(patient_no, i);
+			if(met_time > 0){
+				if(met_time <= max){
+					max = met_time;
+					spreader = i;
+				}
+			}/*
+			else
+				spreader = patient_no;
+			
+		} 
+	}
+	return spreader;
+}
+
+
+int isMet(int patient_no, int entered_patient){
+	int i;
+	int j;
+	int p_move_time;
+	int p_move_place;
+	int t_move_time;
+	int t_move_place;
+	int met_time;
+	void *ifct_element;
+	
+	ifct_element = ifctdb_getData(patient_no);
+	for(i=2;i<N_HISTORY;i++){
+		p_move_time = (ifctele_getinfestedTime(ifct_element) - i);
+		p_move_place = ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-1-i);
+		
+		ifct_element = ifctdb_getData(entered_patient);
+		if(p_move_time <= ifctele_getinfestedTime(ifct_element) && (ifctele_getinfestedTime(ifct_element)-1) <= p_move_time){ 
+			t_move_time = convertTimetoIndex(p_move_time, ifctele_getinfestedTime(ifct_element));
+			t_move_place = ifctele_getHistPlaceIndex(ifct_element, t_move_time);
+		
+			if(p_move_place == t_move_place){
+				met_time = p_move_time;
+			}
+			
+			else{
+				met_time = t_move_time;
+			}
+		}
+		/*
+		else
+			met_time = 0;
+		
+	}
+	return met_time;
 }
 
 int convertTimetoIndex(int time, int infested_time){
@@ -248,7 +340,7 @@ int convertTimetoIndex(int time, int infested_time){
 	
 	return index;
 }
-
+*/
 
 
 
