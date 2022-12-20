@@ -167,12 +167,14 @@ int main(int argc, const char * argv[]) {
             					pre_spreader = trackInfester(spreader);
             					if(0 <= pre_spreader && pre_spreader != spreader){
             						printf("Patient %i was insfected with patient %i\n", spreader, pre_spreader);
+            						spreader = pre_spreader;
             						initial_spreader = pre_spreader;
 								}
 								else if(0 <= pre_spreader && pre_spreader == spreader){
+									p_index = spreader;
 									initial_spreader = pre_spreader;
 								}
-							break;
+							//break;
 							}
 							
             			break;
