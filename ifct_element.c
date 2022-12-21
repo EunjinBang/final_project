@@ -124,6 +124,7 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 	return strPtr;
 }
 
+
 int ifctele_getAge(void* obj){		//구조체의 나이 멤버 변수 반환  
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
@@ -131,8 +132,10 @@ int ifctele_getAge(void* obj){		//구조체의 나이 멤버 변수 반환
 }
 
 
-char* ifctele_getPlaceName(int placeIndex){
-	return countryName[placeIndex];
+unsigned int ifctele_getinfestedTime(void* obj){		//구조체의 확진 시점 반환  
+	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
+	
+	return (strPtr->detected_time);
 }
 
 
@@ -142,10 +145,9 @@ int ifctele_getHistPlaceIndex(void* obj, int index){	//구조체의 장소 반환
 	return (strPtr->history_place[index]);
 }
 
-unsigned int ifctele_getinfestedTime(void* obj){		//구조체의 확진 시점 반환  
-	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
-	
-	return (strPtr->detected_time);
+
+char* ifctele_getPlaceName(int placeIndex){		//장소 인덱스를 장소 문자열로 반환  
+	return countryName[placeIndex];
 }
 
 
@@ -164,7 +166,6 @@ void ifctele_printElement(void*obj){			//각 요소들 출력
 	printf("\n\n");
 }
 
-//element.h 파일의 함수 순서에 맞게 수정하기 
 
 
 
