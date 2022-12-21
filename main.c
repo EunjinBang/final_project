@@ -153,7 +153,6 @@ int main(int argc, const char * argv[]) {
             	
             	if (0 <= p_index && p_index <= ifctdb_len()-1){
 				
-            		while(0 <= p_index){
             			spreader = trackInfester(p_index);
             			
             			if(0 <= spreader && spreader != p_index){
@@ -174,11 +173,8 @@ int main(int argc, const char * argv[]) {
 									p_index = spreader;
 									initial_spreader = pre_spreader;
 								}
-							//break;
 							}
-							
-            			break;
-					}
+						
 					printf("The first spreader is number %i patient.", initial_spreader);
 				}
 				else
@@ -200,25 +196,26 @@ int main(int argc, const char * argv[]) {
 
 int trackInfester(int patient_no){
 	int i;
-	int spreader = -1;	//전파자 
-	int max;
-	int met_time;
+	int spreader = -1;		//전파자 초기값 -1 
+	int max;				//만난시간이 가장 이른지 알기위한 값 
+	int met_time;			//만난 시간 
 	void *ifct_element;
 	
 	ifct_element = ifctdb_getData(patient_no);
-	max = ifctele_getinfestedTime(ifct_element);
+	max = ifctele_getinfestedTime(ifct_element);		//max 값을 발병 확인시간으로 정함 
 	
 	for(i=0;i<ifctdb_len();i++){
 		if(patient_no != i){
-			met_time = isMet(patient_no, i);
-			if(met_time > 0){
-				if(met_time <= max){
-					max = met_time;
-					spreader = i;
+			met_time = isMet(patient_no, i);			//isMet 함수(두 환자가 언제만났는지 리턴하는 함수)를 for 루프를 통해 모든 환자에 대해 확인 
+			if(met_time > 0){							//한번이라도 만났다면 
+				if(met_time <= max){					
+					max = met_time;						//max값을 만난시간으로 바꿔서 지금까지 만난 환자 중 가장 이른 시점인지 확인 
+					spreader = i;						//전파자를 i번째 환자로 저장 
 				}
 			}
 		} 
 	}
+	
 	if(spreader == -1){
 		spreader = patient_no;
 	}
@@ -232,36 +229,33 @@ int isMet(int patient_no, int entered_patient){
 	int p_move_place;
 	int t_move_time;
 	int t_move_place;
-	int met_time;
+	int met_time = -1;
 	void *ifct_element;
 	
-	ifct_element = ifctdb_getData(patient_no);
-	for(i=2;i<N_HISTORY;i++){
-		p_move_time = (ifctele_getinfestedTime(ifct_element) - i);
-		p_move_place = ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-1-i);
-		
-		//for(j=2;j<N_HISTORY;j++) //그냥 날짜 위치가 같으면 출력하는게 아니고 감염시킬 수 있는 날에 위치가 같은지 비교해서 출력하도록 수정해야 함 
+	for(i=2;i<N_HISTORY;i++){						//현재 환자의 0,1,2일쨰 날짜(감염될 수 있는 날짜)와 비교
+		ifct_element = ifctdb_getData(patient_no);
+		p_move_time = (ifctele_getinfestedTime(ifct_element) - i);				//현재 환자의 0일째, 1일째, 2일째의 시점 
+		p_move_place = ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-1-i);	//그 시점의 장소 인덱스 
+		 
 		ifct_element = ifctdb_getData(entered_patient);
-		t_move_time = convertTimetoIndex(p_move_time, ifctele_getinfestedTime(ifct_element));
-		t_move_place = ifctele_getHistPlaceIndex(ifct_element, t_move_time);
+		t_move_time = convertTimetoIndex(p_move_time, ifctele_getinfestedTime(ifct_element));	//대상 환자의 위 시점에서의 날짜 인덱스 저장, 위 시점의 인덱스가 없다면 -1이 저장됨 
 		
-		if(p_move_place == t_move_place){
-				met_time = p_move_time;
+		if(t_move_time >= N_HISTORY - 2){																	//
+			t_move_place = ifctele_getHistPlaceIndex(ifct_element, t_move_time);				//대상 환자의 위 날짜 인덱스에서의 장소 인덱스 저장 
+		
+			if(p_move_place == t_move_place){	//현재 환자와 대상 환자의 장소 인덱스가 같다면 
+				met_time = p_move_time;			//결과값에 시점 저장
 			}
-	
-		else{
-			met_time = t_move_time;
 		}
-
-	return met_time;
 	}
+	return met_time;
 }
 
 int convertTimetoIndex(int time, int infested_time){
 	int index = -1; 		//초기값 -1
 	
-	if (time <= infested_time && time >= infested_time - 1){
-		index = N_HISTORY-(infested_time - time) - 1;			//입력받은 시점으로 장소 배열의 index 변환 
+	if (time <= infested_time && time > infested_time - N_HISTORY){
+		index = N_HISTORY-(infested_time - time) - 1;			//입력받은 시점으로 시간 index 변환 
 	} 
 	
 	return index;
