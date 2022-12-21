@@ -99,7 +99,7 @@ char countryName[N_PLACE+1][MAX_PLACENAME] =
 };
 
 
-typedef struct ifs_ele {
+typedef struct ifs_ele {	//구조체 생성  
 	int index;							//번호
 	int age;							//나이
 	int detected_time;					//감염 시점
@@ -107,12 +107,12 @@ typedef struct ifs_ele {
 }ifs_ele_t;
 
 
-void* ifctele_genElement(int index, int age, unsigned int detected_time, int history_place[N_HISTORY]){
+void* ifctele_genElement(int index, int age, unsigned int detected_time, int history_place[N_HISTORY]){		//구조체 포인터 설정  
 	int i;
 	
 	ifs_ele_t*strPtr;
 	
-	strPtr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));	//동적 메모리 하나 잡기 
+	strPtr = (ifs_ele_t*)malloc(sizeof(ifs_ele_t));	//동적 메모리 잡기 
 
 	strPtr->index = index;
 	strPtr->age = age;
@@ -121,12 +121,10 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 	for(i=0;i<N_HISTORY;i++){
 		strPtr->history_place[i] = history_place[i];
 	}
-	
-	//free 넣으면 안됨 
 	return strPtr;
 }
 
-int ifctele_getAge(void* obj){
+int ifctele_getAge(void* obj){		//구조체의 나이 멤버 변수 반환  
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
 	return (strPtr->age);
@@ -138,20 +136,20 @@ char* ifctele_getPlaceName(int placeIndex){
 }
 
 
-int ifctele_getHistPlaceIndex(void* obj, int index){
+int ifctele_getHistPlaceIndex(void* obj, int index){	//구조체의 장소 반환  
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
 	return (strPtr->history_place[index]);
 }
 
-unsigned int ifctele_getinfestedTime(void* obj){
+unsigned int ifctele_getinfestedTime(void* obj){		//구조체의 확진 시점 반환  
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
 	return (strPtr->detected_time);
 }
 
 
-void ifctele_printElement(void*obj){
+void ifctele_printElement(void*obj){			//각 요소들 출력  
 	int i;
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
@@ -159,9 +157,9 @@ void ifctele_printElement(void*obj){
 	printf("age : %i\n", strPtr->age);
 	printf("infected time : %i\n", strPtr->detected_time);
 	printf("place : " );
-	//for문으로 장소 출력하게 만들어야 함
+	
 	for(i=0;i<N_HISTORY;i++){
-		printf("%s\t", countryName[strPtr->history_place[i]]);	//숫자가 아닌 지역 이름이 영어로 나오도록 수정하기 
+		printf("%s\t", countryName[strPtr->history_place[i]]);	//지역 이름이 숫자가 아닌 문자로 나오도록  
 	}
 	printf("\n\n");
 }
