@@ -55,9 +55,8 @@ int main(int argc, const char * argv[]) {
 			fscanf(fp, "%i", &history_place[i]);					//5가지 위치 읽기 
 		}
 		
-			ifct_element = ifctele_genElement(index, age, detected_time, history_place);
-		
-			ifctdb_addTail(ifct_element);		//맨 끝에 데이터 삽입 
+		ifct_element = ifctele_genElement(index, age, detected_time, history_place);
+		ifctdb_addTail(ifct_element);		//맨 끝에 데이터 삽입 
 	}
 	
     //1-3. FILE pointer close
@@ -122,7 +121,7 @@ int main(int argc, const char * argv[]) {
                 	ifct_element = ifctdb_getData(j);
                 	
 					if (strcmp(scan_place, ifctele_getPlaceName(ifctele_getHistPlaceIndex(ifct_element, N_HISTORY-1))) == 0){	//환자의 마지막 장소와 입력받은 문자열이 같으면 출력 
-					ifctele_printElement(ifct_element);
+						ifctele_printElement(ifct_element);
 					}
 					
 				}
@@ -168,6 +167,7 @@ int main(int argc, const char * argv[]) {
             				
             			while(p_index != spreader){		//최초 전파자가 나올때까지 반복  
             				pre_spreader = trackInfester(spreader);				//위와 동일한 방식으로 반복  
+            				
             				if(pre_spreader != spreader){
             					ifct_element = ifctdb_getData(pre_spreader);
             					met_infectedtime = isMet(spreader, pre_spreader);
