@@ -103,7 +103,7 @@ typedef struct ifs_ele {	//구조체 생성
 	int index;							//번호
 	int age;							//나이
 	int detected_time;					//감염 시점
-	place_t history_place[N_HISTORY];	//감염 직전 이동경로 place_t 배열 (N_HISTORY) 
+	place_t history_place[N_HISTORY];	//이동경로 place_t 배열
 }ifs_ele_t;
 
 
@@ -121,6 +121,7 @@ void* ifctele_genElement(int index, int age, unsigned int detected_time, int his
 	for(i=0;i<N_HISTORY;i++){
 		strPtr->history_place[i] = history_place[i];
 	}
+	
 	return strPtr;
 }
 
@@ -132,7 +133,7 @@ int ifctele_getAge(void* obj){		//구조체의 나이 멤버 변수 반환
 }
 
 
-unsigned int ifctele_getinfestedTime(void* obj){		//구조체의 확진 시점 반환  
+unsigned int ifctele_getinfestedTime(void* obj){		//구조체의 발병 확인 시점 반환  
 	ifs_ele_t *strPtr = (ifs_ele_t *)obj;
 	
 	return (strPtr->detected_time);
@@ -147,6 +148,7 @@ int ifctele_getHistPlaceIndex(void* obj, int index){	//구조체의 장소 반환
 
 
 char* ifctele_getPlaceName(int placeIndex){		//장소 인덱스를 장소 문자열로 반환  
+
 	return countryName[placeIndex];
 }
 
